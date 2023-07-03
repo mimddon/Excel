@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Duplicate Students</title>
+</head>
+<body>
+  <p>중복된 학생 정보가 발견되었습니다.</p>
+  <div>
+    <table>
+      <tr>
+        <th>학번</th>
+        <th>이름</th>
+        <th>성별</th>
+        <th>학년</th>
+        <th>이메일</th>
+      </tr>
+      <tr th:each="duplicate : ${duplicates}">
+        <td th:text="${duplicate.studentId}"></td>
+        <td th:text="${duplicate.name}"></td>
+        <td th:text="${duplicate.gender == 0 ? '남자' : '여자'}"></td>
+        <td th:text="${duplicate.grade}"></td>
+        <td th:text="${duplicate.email}"></td>
+      </tr>
+    </table>
+    <!-- 건너뛰기 버튼 -->
+    <form method="post" action="/duplicate">
+      <input type="hidden" name="action" value="skip">
+      <button type="submit">건너뛰기</button>
+    </form>
+
+    <!-- 덮어쓰기 버튼 -->
+    <form method="post" action="/duplicate">
+      <input type="hidden" name="action" value="overwrite">
+      <button type="submit">덮어쓰기</button>
+    </form>
+  </div>
+
+</body>
+</html>
