@@ -1,24 +1,14 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ex.excel.StudentMapper">
+<!-- StudentMapper.xml -->
 
-    <insert id="insertStudent" parameterType="com.ex.excel.Student">
+<mapper namespace="com.example.mapper.StudentMapper">
+
+    <!-- 엑셀 데이터를 데이터베이스에 저장하는 메서드 -->
+    <insert id="insertStudents" parameterType="java.util.List">
         INSERT INTO student (student_id, name, gender, grade, email)
-        VALUES (#{studentId}, #{name}, #{gender}, #{grade}, #{email})
+        VALUES
+        <foreach collection="list" item="student" separator=",">
+            (#{student.studentId}, #{student.name}, #{student.gender}, #{student.grade}, #{student.email})
+        </foreach>
     </insert>
-
-    <select id="getAllStudents" resultType="com.ex.excel.Student">
-        SELECT * FROM student
-    </select>
-
-    <update id="updateStudent" parameterType="com.ex.excel.Student">
-        UPDATE student
-        SET name = #{name}, gender = #{gender}, grade = #{grade}, email = #{email}
-        WHERE student_id = #{studentId}
-    </update>
-
-    <delete id="deleteStudent" parameterType="int">
-        DELETE FROM student WHERE student_id = #{studentId}
-    </delete>
 
 </mapper>
