@@ -121,7 +121,7 @@ public class ExcelController {
     public String getAllStudents(Model model) {
         List<Student> students = service.getAllStudents();
         model.addAttribute("students", students);
-        return "redirect: /list";
+        return "/list";
     }
 
 
