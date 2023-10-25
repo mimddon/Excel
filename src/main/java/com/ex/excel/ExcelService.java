@@ -7,8 +7,5 @@ public interface ExcelService {
 
     List<Student> getAllStudents();
 
-    List<Student> checkForDuplicates(List<Student> students);
-
-    List<Student> getDuplicates(List<Student> duplicates);
-
+    void deleteDuplicates(List<Student> students);
 }

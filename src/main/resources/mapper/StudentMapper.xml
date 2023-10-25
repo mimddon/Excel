@@ -25,4 +25,17 @@
         SELECT * FROM student
     </select>
 
+    <delete id="deleteStudent" parameterType="int">
+        DELETE FROM student
+        WHERE student_Id = #{studentId}
+    </delete>
+
+    <delete id="deleteStudents" parameterType="java.util.List">
+        DELETE FROM student
+        WHERE studentId IN
+        <foreach collection="list" item="studentId" open="(" separator="," close=")">
+            #{studentId}
+        </foreach>
+    </delete>
+
 </mapper>

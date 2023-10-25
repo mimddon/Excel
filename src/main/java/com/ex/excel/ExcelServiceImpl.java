@@ -23,40 +23,21 @@ public class ExcelServiceImpl implements ExcelService {
     }
 
     @Override
-    public List<Student> checkForDuplicates(List<Student> students) {
-        List<Integer> studentIds = new ArrayList<>();
-        List<Student> duplicates = new ArrayList<>();
-
-
-        for (Student student : students) {
-            int studentId = student.getStudentId();
-            if (studentIds.contains(studentId)) {
-                duplicates.add(student);
-            } else {
-                studentIds.add(studentId);
-            }
-        }
-
-        return duplicates;
-    }
-
-    @Override
-    public List<Student> getDuplicates(List<Student> students) {
+    public void deleteDuplicates(List<Student> students) {
         List<Student> existingStudents = getAllStudents();
-        List<Student> duplicates = new ArrayList<>();
+        //List<Integer> duplicatesId = new ArrayList<>();
 
         for (Student student : students) {
             for (Student existingStudent : existingStudents) {
                 if (student.getStudentId() == existingStudent.getStudentId()) {
-                    duplicates.add(student);
+                    //duplicatesId.add(student.getStudentId());
+                    dao.deleteStudent(student.getStudentId());
                     break;
                 }
             }
         }
 
-        return duplicates;
+
     }
-
-
 
 }

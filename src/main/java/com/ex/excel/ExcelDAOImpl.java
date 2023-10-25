@@ -21,4 +21,14 @@ public class ExcelDAOImpl implements ExcelDAO {
     public List<Student> getAllStudents() {
         return sql.selectList("Excel.getAllStudents");
     }
+
+    @Override
+    public void deleteStudent(int studentId) {
+        sql.delete("Excel.deleteStudent", studentId);
+    }
+
+    @Override
+    public void deleteStudents(List<Integer> duplicatesId) {
+        sql.delete("Excel.deleteStudents", duplicatesId);
+    }
 }
