@@ -16,7 +16,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -35,7 +37,9 @@ public class ExcelController {
             List<Student> students = null;
             try {
                 String fileName = file.getOriginalFilename();
-                String filePath = uploadDirectory + "/" + fileName;
+                String timestamp = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date());
+                String newFileName = timestamp + "_" + fileName; // 현재 시간과 파일 이름을 결합
+                String filePath = uploadDirectory + "/" + newFileName;
                 file.transferTo(new File(filePath));
 
                 // 엑셀 데이터 처리 로직 추가
@@ -73,19 +77,17 @@ public class ExcelController {
 
                 fis.close();
 
-                // 중복이 없는 경우 데이터베이스에 저장
+                // 데이터베이스에 저장
                 service.insertStudents(students);
 
                 return "redirect:/";
             } catch (DuplicateKeyException e) {
                 // 중복 예외 처리
-                List<Student> duplicates = service.getDuplicates(students);
+                service.deleteDuplicates(students);
 
-                model.addAttribute("duplicates", duplicates);
+                service.insertStudents(students);
 
-                System.out.println("중복된 학생 : " + duplicates);
-
-                return "duplicate"; // 중복 처리 페이지의 뷰 이름
+                return "redirect:/list";
             } catch (Exception e) {
                 // 예외 처리
                 e.printStackTrace(); // 예외 메시지 출력
@@ -96,26 +98,6 @@ public class ExcelController {
             return "redirect:/error";
         }
     }
-
-    @PostMapping("/duplicate")
-    public String handleDuplicatesPage(@RequestParam("action") String action, Model model) {
-        if (action.equals("skip")) {
-            // 중복 데이터 건너뛰기 로직 구현
-
-
-            return "redirect:/"; // 처리 완료 후 리다이렉트
-        } else if (action.equals("overwrite")) {
-            // 중복 데이터 덮어쓰기 로직 구현
-            // 중복 처리 로직
-            return "redirect:/"; // 처리 완료 후 리다이렉트
-        } else {
-            // 잘못된 액션 값이 넘어온 경우 처리할 로직 구현
-            return "error"; // 에러 페이지로 이동 또는 다른 처리 방식 선택
-        }
-    }
-
-
-
 
     @GetMapping("/list")
     public String getAllStudents(Model model) {
