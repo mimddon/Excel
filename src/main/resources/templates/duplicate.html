@@ -96,19 +96,73 @@
       </tr>
     </table>
     <!-- 건너뛰기 버튼 -->
-    <form method="post" action="/duplicate">
+    <!--<form method="post" action="/duplicate">
       <input type="hidden" name="action" value="skip">
-      <input type="hidden" th:name="duplicates" th:each="duplicate : ${duplicates}" th:value="${duplicate.studentId}"/>
-      <button type="submit">건너뛰기</button>
-    </form>
+      <input type="hidden" name="students" th:value="${students}">
+    </form>-->
+      <button id="skipButton" type="submit">건너뛰기</button>
+
 
     <!-- 덮어쓰기 버튼 -->
-    <form method="post" action="/duplicate">
-      <input type="hidden" th:name="duplicates" th:each="duplicate : ${duplicates}" th:value="${duplicate.studentId}"/>
+    <!--<form method="post" action="/duplicate">
       <input type="hidden" name="action" value="overwrite">
-      <button type="submit">덮어쓰기</button>
-    </form>
+      <input type="hidden" name="students" th:value="${students}">
+    </form>-->
+      <button id="overwriteButton" type="button">덮어쓰기</button>
+
   </div>
+<script th:inline="javascript">
+  // JavaScript에서 모델의 데이터 사용
+  const duplicates = [[${duplicates}]];
+  const students = [[${students}]];// Thymeleaf 템플릿 문법으로 데이터 가져오기
+  const overwriteButton = document.getElementById("overwriteButton");
+  const skipButton = document.getElementById("skipButton");
+
+  // 데이터 순회 및 출력
+  for (let i = 0; i < duplicates.length; i++) {
+    console.log(typeof duplicates[i]);
+    console.log(students[i]);
+  }
+  overwriteButton.addEventListener("click", function () {
+    fetch("/duplicate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        action: "overwrite",
+        students: students
+      })
+    })
+            .then(response => {
+              alert("완료되었습니다.");
+              window.location.href = "/list";
+            })
+            .catch(error => {
+              console.error("Error: " + error);
+            });
+  });
+
+  skipButton.addEventListener("click", function () {
+    fetch("/duplicate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        action: "skip",
+        students: students
+      })
+    })
+            .then(response => {
+              alert("완료되었습니다.");
+              window.location.href = "/list";
+            })
+            .catch(error => {
+              console.error("Error: " + error);
+            });
+  });
+</script>
 
 </body>
 </html>

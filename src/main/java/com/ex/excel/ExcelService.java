@@ -8,4 +8,10 @@ public interface ExcelService {
     List<Student> getAllStudents();
 
     void deleteDuplicates(List<Student> students);
+
+    void overwriteDuplicate(List<Student> students);
+
+    void skipDuplicate(List<Student> students);
+
+    List<Student> getDuplicates(List<Student> students);
 }

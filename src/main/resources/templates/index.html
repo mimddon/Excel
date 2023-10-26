@@ -64,17 +64,19 @@
 
 </head>
 <body>
-<div>
-    <a href="/list">리스트로 이동</a>
-</div>
+    <div>
+        <a href="/list">리스트로 이동</a>
+    </div>
 
-  <h2>엑셀 파일을 업로드 해주세요</h2>
+      <h2>엑셀 파일을 업로드 해주세요</h2>
 
-  <form action="/upload" method="post" enctype="multipart/form-data">
-    <input type="file" name="file" />
-    <br/>
-    <input type="submit" value="업로드" />
-  </form>
+    <form action="/upload" method="post" enctype="multipart/form-data">
+        <input type="file" name="file"/>
+        <br/>
+        <input id="fileUploadButton" type="submit" value="업로드"/>
+    </form>
+
+
 
 
 
