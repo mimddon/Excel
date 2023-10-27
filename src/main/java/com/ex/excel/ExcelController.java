@@ -95,19 +95,17 @@ public class ExcelController {
             List<Student> students = null;
             try {
                 String fileName = file.getOriginalFilename();
-                String timestamp = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date());
-                String newFileName = timestamp + "_" + fileName; // 현재 시간과 파일 이름을 결합
+                String timestamp = new SimpleDateFormat("yyyyMMddHHmm-ssSSS").format(new Date());
+                String newFileName = timestamp + "_" + fileName;
                 String filePath = uploadDirectory + "/" + newFileName;
                 file.transferTo(new File(filePath));
 
-                // 엑셀 데이터 처리 로직 추가
                 FileInputStream fis = new FileInputStream(filePath);
                 Workbook workbook = new XSSFWorkbook(fis);
-                Sheet sheet = workbook.getSheetAt(0); // 첫 번째 시트 가져오기
+                Sheet sheet = workbook.getSheetAt(0);
 
                 students = new ArrayList<>();
 
-                // 첫 번째 행은 헤더이므로 건너뜀
                 int startRowNum = 1;
                 int lastRowNum = sheet.getLastRowNum();
                 for (int rowNum = startRowNum; rowNum <= lastRowNum; rowNum++) {
@@ -128,7 +126,6 @@ public class ExcelController {
                 }
                 fis.close();
 
-                // 데이터베이스에 저장
                 service.insertStudents(students);
 
                 return "redirect:/list";
@@ -157,15 +154,12 @@ public class ExcelController {
         List<Student> students = json.getStudents();
 
         if ("overwrite".equals(action)) {
-            // 덮어쓰기 동작 수행
             service.overwriteDuplicate(students);
             return "redirect:/list";
         } else if ("skip".equals(action)) {
-            // 건너뛰기 동작 수행
             service.skipDuplicate(students);
             return "redirect:/list";
         } else {
-            // 액션 값이 유효하지 않은 경우 처리
             return "redirect:/error";
         }
     }
